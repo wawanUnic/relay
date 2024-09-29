@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <link href="{{ url_for('static', filename='css/sweetalert2.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}Pi-контроллер{% endblock %}
+
+{% block page_content %}
+    <p>Используйте кнопки ниже для установки/переключения состояния реле.</p>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <th scope="row">Прихожая (gpio23)</th>
+            <td>
+                <div class="btn-group-lg" role="group" aria-label="Relay 1">
+                    <button type="button" class="btn btn-success" id="on-23" onclick="setRelay(23, true);">Вкл</button>
+                    <button type="button" class="btn btn-danger" id="off-23" onclick="setRelay(23, false);">Откл
+                    </button>
+                    <button type="button" class="btn btn-info" id="toggle-23" onclick="toggleRelay(23);">Переключить
+                    </button>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">Коридор (gpio24)</th>
+            <td>
+                <div class="btn-group-lg" role="group" aria-label="Relay 2">
+                    <button type="button" class="btn btn-success" id="on-24" onclick="setRelay(24, true);">Вкл</button>
+                    <button type="button" class="btn btn-danger" id="off-24" onclick="setRelay(24, false);">Откл
+                    </button>
+                    <button type="button" class="btn btn-info" id="toggle-24" onclick="toggleRelay(24);">Переключить
+                </div>
+            </td>
+
+        </tr>
+        <tr>
+            <th scope="row">Туалет (gpio25)</th>
+            <td>
+                <div class="btn-group-lg" role="group" aria-label="Relay 3">
+                    <button type="button" class="btn btn-success" id="on-25" onclick="setRelay(25, true);">Вкл</button>
+                    <button type="button" class="btn btn-danger" id="off-25" onclick="setRelay(25, false);">Откл
+                    </button>
+                    <button type="button" class="btn btn-info" id="toggle-25" onclick="toggleRelay(25);">Переключить
+                    </button>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">Красная кнопка (gpio16)</th>
+            <td>
+                <div class="btn-group-lg" role="group" aria-label="Relay 4">
+                    <button type="button" class="btn btn-success" id="on-16" onclick="setRelay(16, true);">Вкл</button>
+                    <button type="button" class="btn btn-danger" id="off-16" onclick="setRelay(16, false);">Откл
+                    </button>
+                    <button type="button" class="btn btn-info" id="toggle-16" onclick="toggleRelay(16);">Переключить
+                    </button>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <p>Вы должны услышать, как щелкают реле. Если нет, то, скорее всего, это не работает :-)</p>
+{% endblock %}

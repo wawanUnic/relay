@@ -1,0 +1,35 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Pi-контроллер{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link href="{{ url_for('static', filename='css/sticky-footer-navbar.css') }}" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/sweetalert2.js') }}"></script>
+{% endblock %}
+
+{% block navbar %}
+    <div class="navbar navbar-inverse" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">Pi-контроллер для 4-х реле</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% block page_content %} {% endblock %}
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted">2024. Проект создан* этим <a href="https://linkedin.com/in/panamarchuk/" target="_blank">типом</a> для этого <a href="https://linkedin.com/in/aliaksandrpasynkau" target="_blank">типа</a>.</p>
+        </div>
+    </footer>
+{% endblock %}
