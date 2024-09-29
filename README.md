@@ -136,6 +136,23 @@ sudo systemctl enable --now myServer.service
 systemctl status myServer.service
 ```
 
+## 7a. Открываем порты 80(http) и 443(httpS) в Интернет ("наружу")
+
+Воспользуемся графическим интерфейсом Luci. Но для ранних версия используем команды Uci:
+```
+config redirect
+        option src       wan
+        option src_dport 80
+        option proto     tcp
+        option dest_ip   192.168.1.10 - адрес Raspberry во внутренней сети
+
+config redirect
+        option src       wan
+        option src_dport 443
+        option proto     tcp
+        option dest_ip   192.168.1.10 - адрес Raspberry во внутренней сети
+```
+
 ## 8. Устанавливаем кэширующий прокси-сервер
 
 Устанавливаем nginx:
@@ -281,3 +298,15 @@ location / {
 sudo nginx -t
 sudo systemctl restart nginx
 ```
+
+## 10. Тестируем перезагрузку системы при включенных реле и при отключенных реле
+
+Замеры проводились в программе логического анализатора SaleaLogic 1.2.40
+
+При всех включенных каналах перезагрузка системы просто их сбрасывает (отключает). Промаргивания реле при загрузке замечены не были.
+Перезагрузка RaspberryPi:
+![Страница в мобильной версии](https://github.com/wawanUnic/relay/blob/main/screenshots/pageMobile.png)
+
+При всех отключенных каналах перезагрузка системы проходит тихо. Промаргивания реле при загрузке замечены не были.
+Перезагрузка RaspberryPi:
+![Страница в мобильной версии](https://github.com/wawanUnic/relay/blob/main/screenshots/pageMobile.png)
