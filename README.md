@@ -62,22 +62,17 @@ sudo apt upgrade
 sudo apt install mc
 sudo reboot
 sudo apt-get install python3-pip
-sudo apt install python3.12-venv
+sudo apt install python3-venv
 ```
 
 ## 5. Копируем исходные файлы
 
-Создаем папку relay. Копируем в них исходные файлы
-
-Даем права на исполнение:
-```
-find relay/ -type d -exec chmod 755 {} \;
-find relay/ -type f -exec chmod 755 {} \;
-```
+Создаем папку relay. Копируем в неё исходные файлы. Права на исполнение давать не нужно
 
 ## 6. Создаем виртуальное окружение
 
-Версии добавленных пакетов и их зависимостей:
+Версии добавленных пакетов и их зависимостей
+```
 blinker         1.8.2
 click           8.1.7
 dominate        2.9.1
@@ -91,7 +86,9 @@ RPi.GPIO        0.7.1
 setuptools      66.1.1
 visitor         0.1.3
 Werkzeug        3.0.4
+```
 
+Создаем вирт.окружение
 ```
 cd /home/relay
 python3 -m venv env
@@ -117,7 +114,7 @@ Group=pi
 WorkingDirectory=/home/relay
 Environment="PYTHONPATH=/home/pi/relay/env/lib/python3.11/site-packages"
 ExecStartPre=/usr/bin/sleep 10
-ExecStart=/home/pi/relay/env/bin/python3.11 /home/pi/relay/myServer.py
+ExecStart=/home/pi/relay/env/bin/python3.11 /home/pi/relay/myServer.py  - Версия Python может быть другой. Уже существуем как минимум 3.12. Необходимо проверить какая версия в папке
 
 RestartSec=10
 Restart=always
