@@ -16,6 +16,7 @@
 Креды для аутентификации на сайте relay:wW0000
 
 Используются выводы GPIO23, GPIO24, GPIO25 и GPIO16:
+
 ![Используются выводы GPIO23, GPIO24, GPIO25 и GPIO16](https://github.com/wawanUnic/relay/blob/main/screenshots/pinOut.png)
 
 Задействованные порты:
