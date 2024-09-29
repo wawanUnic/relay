@@ -1,7 +1,6 @@
 # relay. Управление реле на платформе RaspberryPi
 
-https://github.com/wawanUnic/relay/blob/main/screenshots/pageMobile.png
-![Image alt](https://github.com/wawanUnic/relay/raw/main/screenshots/pageMobile.png)
+![Image alt](https://github.com/wawanUnic/relay/blob/main/screenshots/pageMobile.png)
 
 
 ## 1. Установка на Raspberry 64bit
