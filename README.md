@@ -255,7 +255,7 @@ sudo certbot renew --dry-run
 Опция -c создает новый файл со связками
 ```
 sudo apt-get install apache2-utils
-sudo htpasswd -c /etc/nginx/htpasswd user_name
+sudo htpasswd -c /etc/nginx/htpasswd relay
 ```
 
 Проверим файл:
@@ -304,7 +304,7 @@ sudo nginx -t
 sudo systemctl restart nginx
 ```
 
-## 10. Тестируем перезагрузку системы при включенных реле и при отключенных реле
+## 11. Тестируем перезагрузку системы при включенных реле и при отключенных реле
 
 Замеры проводились в программе логического анализатора SaleaLogic 1.2.40
 
