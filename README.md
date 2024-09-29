@@ -71,6 +71,18 @@ sudo apt install python3-venv
 
 ## 6. Создаем виртуальное окружение
 
+Создаем вирт.окружение
+```
+cd /home/relay
+python3 -m venv env
+source env/bin/activate
+pip install Flask
+pip install Flask-Bootstrap
+pip install RPi.GPIO
+pip list
+python myServer.py -- Эту команду не запускать! Это только для ручного тестирования
+```
+
 Версии добавленных пакетов и их зависимостей
 ```
 blinker         1.8.2
@@ -86,18 +98,6 @@ RPi.GPIO        0.7.1
 setuptools      66.1.1
 visitor         0.1.3
 Werkzeug        3.0.4
-```
-
-Создаем вирт.окружение
-```
-cd /home/relay
-python3 -m venv env
-source env/bin/activate
-pip install Flask
-pip install Flask-Bootstrap
-pip install RPi.GPIO
-pip list
-python myServer.py -- Эту команду не запускать! Это только для ручного тестирования
 ```
 
 ## 7. Добавляем сервис в systemD
