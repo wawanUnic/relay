@@ -6,6 +6,8 @@
 
 Настройка производится для сервера relay.chu.by с адресом 78.10.222.186
 
+Работает от пользователя Pi
+
 Задействованные порты:
 
 ```
@@ -59,4 +61,221 @@ sudo apt install mc
 sudo reboot
 sudo apt-get install python3-pip
 sudo apt install python3.12-venv
+```
+
+## 5. Копируем исходные файлы
+
+Создаем папку relay. Копируем в них исходные файлы
+
+Даем права на исполнение:
+```
+find relay/ -type d -exec chmod 755 {} \;
+find relay/ -type f -exec chmod 755 {} \;
+```
+
+## 6. Создаем виртуальное окружение
+
+Версии добавленных пакетов и их зависимостей:
+blinker         1.8.2
+click           8.1.7
+dominate        2.9.1
+Flask           3.0.3
+Flask-Bootstrap 3.3.7.1
+itsdangerous    2.2.0
+Jinja2          3.1.4
+MarkupSafe      2.1.5
+pip             23.0.1
+RPi.GPIO        0.7.1
+setuptools      66.1.1
+visitor         0.1.3
+Werkzeug        3.0.4
+
+```
+cd /home/relay
+python3 -m venv env
+source env/bin/activate
+pip install Flask
+pip install Flask-Bootstrap
+pip install RPi.GPIO
+pip list
+python myServer.py -- Эту команду не запускать! Это только для ручного тестирования
+```
+
+## 7. Добавляем сервис в systemD
+
+sudo nano /etc/systemd/system/myServer.service:
+```
+[Unit]
+Description=myServer
+After=network-online.target nss-user-lookup.target
+
+[Service]
+User=pi
+Group=pi
+WorkingDirectory=/home/relay
+Environment="PYTHONPATH=/home/pi/relay/env/lib/python3.11/site-packages"
+ExecStartPre=/usr/bin/sleep 10
+ExecStart=/home/pi/relay/env/bin/python3.11 /home/pi/relay/myServer.py
+
+RestartSec=10
+Restart=always
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Настраивам systemD:
+```
+sudo systemctl daemon-reload
+sudo systemctl enable --now myServer.service
+systemctl status myServer.service
+```
+
+## 8. Устанавливаем кэширующий прокси-сервер
+
+Устанавливаем nginx:
+```
+sudo apt install nginx
+sudo ufw status (?)
+sudo systemctl enable nginx
+sudo systemctl start nginx
+systemctl status nginx
+```
+
+Правим настройки sudo nano /etc/nginx/sites-available/myServer:
+```
+server {
+    listen 80;
+    listen [::]:80;
+    server_name relay.chu.by;
+    access_log /var/log/nginx/relay.chu.by-access.log;
+    error_log /var/log/nginx/relay.chu.by-error.log;
+
+location / {
+    proxy_pass http://localhost:8888;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
+
+Создаем линк, проверяем ошибки, перезапускаем:
+```
+sudo ln -s /etc/nginx/sites-available/myServer /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
+```
+
+## 9. Защищаем шифрованием
+
+Об особенностях установки можно почитать [тут](https://serveradmin.ru/ustanovka-i-nastroyka-nginx-php-fpm-php7-1-na-centos-7/#_ssl_Lets_Encrypt) и [тут](https://serveradmin.ru/nginx-proxy_pass/)
+
+Иногда бывает ошибка с /etc/ssl/certs/dhparam.pem. Тогда нужно сформировать новый ключ командой: sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
+
+Ключ генерируется около 10-20 минут!
+
+```
+sudo apt install certbot
+sudo certbot certonly
+sudo nginx -t
+Если ошибка с /etc/ssl/certs/dhparam.pem, тогда еще нужна команда: sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
+sudo nginx -t
+sudo systemctl restart nginx
+```
+
+Добавляем переадресацию на шифрованное соединение sudo nano /etc/nginx/sites-available/myServer:
+```
+server {
+    listen 80;
+    listen [::]:80;
+    server_name relay.chu.by;
+    return 301 https://relay.chu.by$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443;
+    server_name relay.chu.by;
+    access_log /var/log/nginx/relay.chu.by-access.log;
+    error_log /var/log/nginx/relay.chu.by-error.log;
+
+    keepalive_timeout 60;
+    ssl_certificate /etc/letsencrypt/live/nero-reports.duckdns.org/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/nero-reports.duckdns.org/privkey.pem;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers 'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECD>
+    ssl_dhparam /etc/ssl/certs/dhparam.pem;
+    add_header Strict-Transport-Security 'max-age=604800';
+
+location / {
+    proxy_pass http://localhost:8000;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
+
+Можно посмотреть статус бота и принудительно обновить:
+```
+sudo systemctl status certbot.timer
+sudo certbot renew --dry-run
+```
+
+## 11. Добавляем базовую аутентификацию
+Работаем от Pi
+
+Опция -c создает новый файл со связками
+```
+sudo apt-get install apache2-utils
+sudo htpasswd -c /etc/nginx/htpasswd user_name
+```
+
+Проверим файл:
+```
+nano /etc/nginx/htpasswd
+```
+
+Конфигурируем sudo nano /etc/nginx/sites-available/nero-reports
+```
+server {
+    listen 80;
+    listen [::]:80;
+    server_name nero-reports.duckdns.org;
+    return 301 https://nero-reports.duckdns.org$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443;
+    server_name nero-reports.duckdns.org;
+    access_log /var/log/nginx/nero-reports.duckdns.org-access.log;
+    error_log /var/log/nginx/nero-reports.duckdns.org-error.log;
+
+    keepalive_timeout 60;
+    ssl_certificate /etc/letsencrypt/live/nero-reports.duckdns.org/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/nero-reports.duckdns.org/privkey.pem;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers 'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECD>
+    ssl_dhparam /etc/ssl/certs/dhparam.pem;
+    add_header Strict-Transport-Security 'max-age=604800';
+
+location / {
+    proxy_pass http://localhost:8000;
+    auth_basic "Restricted";
+    auth_basic_user_file /etc/nginx/htpasswd;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
+
+Перезапускаем nginx:
+```
+sudo nginx -t
+sudo systemctl restart nginx
 ```
