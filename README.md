@@ -203,15 +203,15 @@ server {
     error_log /var/log/nginx/relay.chu.by-error.log;
 
     keepalive_timeout 60;
-    ssl_certificate /etc/letsencrypt/live/nero-reports.duckdns.org/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/nero-reports.duckdns.org/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/relay.chu.by/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/relay.chu.by/privkey.pem;
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     ssl_ciphers 'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECD>
     ssl_dhparam /etc/ssl/certs/dhparam.pem;
     add_header Strict-Transport-Security 'max-age=604800';
 
 location / {
-    proxy_pass http://localhost:8000;
+    proxy_pass http://localhost:8888;
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Real-IP $remote_addr;
@@ -225,8 +225,7 @@ sudo systemctl status certbot.timer
 sudo certbot renew --dry-run
 ```
 
-## 11. Добавляем базовую аутентификацию
-Работаем от Pi
+## 10. Добавляем базовую аутентификацию
 
 Опция -c создает новый файл со связками
 ```
@@ -239,32 +238,32 @@ sudo htpasswd -c /etc/nginx/htpasswd user_name
 nano /etc/nginx/htpasswd
 ```
 
-Конфигурируем sudo nano /etc/nginx/sites-available/nero-reports
+Конфигурируем sudo nano /etc/nginx/sites-available/myServer
 ```
 server {
     listen 80;
     listen [::]:80;
-    server_name nero-reports.duckdns.org;
-    return 301 https://nero-reports.duckdns.org$request_uri;
+    server_name relay.chu.by;
+    return 301 https://relay.chu.by$request_uri;
 }
 
 server {
     listen 443 ssl http2;
     listen [::]:443;
-    server_name nero-reports.duckdns.org;
-    access_log /var/log/nginx/nero-reports.duckdns.org-access.log;
-    error_log /var/log/nginx/nero-reports.duckdns.org-error.log;
+    server_name relay.chu.by;
+    access_log /var/log/nginx/relay.chu.by-access.log;
+    error_log /var/log/nginx/relay.chu.by-error.log;
 
     keepalive_timeout 60;
-    ssl_certificate /etc/letsencrypt/live/nero-reports.duckdns.org/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/nero-reports.duckdns.org/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/relay.chu.by/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/relay.chu.by/privkey.pem;
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     ssl_ciphers 'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECD>
     ssl_dhparam /etc/ssl/certs/dhparam.pem;
     add_header Strict-Transport-Security 'max-age=604800';
 
 location / {
-    proxy_pass http://localhost:8000;
+    proxy_pass http://localhost:8888;
     auth_basic "Restricted";
     auth_basic_user_file /etc/nginx/htpasswd;
     proxy_set_header Host $host;
