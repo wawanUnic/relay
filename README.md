@@ -122,7 +122,7 @@ User=pi
 Group=pi
 WorkingDirectory=/home/relay
 Environment="PYTHONPATH=/home/pi/relay/env/lib/python3.11/site-packages" - Версия Python может быть другой. Уже существует как минимум 3.12. Необходимо проверить какая версия в папке
-ExecStartPre=/usr/bin/sleep 10
+ExecStartPre=/usr/bin/sleep 10 - Бывает из-за этого ошибка
 ExecStart=/home/pi/relay/env/bin/python3.11 /home/pi/relay/myServer.py - Версия Python может быть другой. Уже существует как минимум 3.12. Необходимо проверить какая версия в папке
 
 RestartSec=10
@@ -143,7 +143,7 @@ systemctl status myServer.service
 
 ## 7a. Открываем порты 80(http) и 443(httpS) в Интернет ("наружу")
 
-Воспользуемся графическим интерфейсом Luci. Но для ранних версия используем команды Uci:
+Воспользуемся графическим интерфейсом Luci. Но для ранних версий используем команды Uci:
 ```
 config redirect
         option src       wan
