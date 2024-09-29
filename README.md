@@ -303,10 +303,14 @@ sudo systemctl restart nginx
 
 Замеры проводились в программе логического анализатора SaleaLogic 1.2.40
 
+Эти замеры касаются только выводов GPIO23, GPIO24, GPIO25 и GPIO16. Возможно с другими выводами ситуация будет иная...
+
 При всех включенных каналах перезагрузка системы просто их сбрасывает (отключает). Промаргивания реле при загрузке замечены не были.
+
 Перезагрузка RaspberryPi:
 ![Перезагрузка RaspberryPi](https://github.com/wawanUnic/relay/blob/main/screenshots/RebootInHi.png)
 
 При всех отключенных каналах перезагрузка системы проходит тихо. Промаргивания реле при загрузке замечены не были.
+
 Перезагрузка RaspberryPi:
 ![Перезагрузка RaspberryPi](https://github.com/wawanUnic/relay/blob/main/screenshots/RebootInLow.png)
