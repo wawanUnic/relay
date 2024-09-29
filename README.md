@@ -112,9 +112,9 @@ After=network-online.target nss-user-lookup.target
 User=pi
 Group=pi
 WorkingDirectory=/home/relay
-Environment="PYTHONPATH=/home/pi/relay/env/lib/python3.11/site-packages"
+Environment="PYTHONPATH=/home/pi/relay/env/lib/python3.11/site-packages" - Версия Python может быть другой. Уже существует как минимум 3.12. Необходимо проверить какая версия в папке
 ExecStartPre=/usr/bin/sleep 10
-ExecStart=/home/pi/relay/env/bin/python3.11 /home/pi/relay/myServer.py  - Версия Python может быть другой. Уже существуем как минимум 3.12. Необходимо проверить какая версия в папке
+ExecStart=/home/pi/relay/env/bin/python3.11 /home/pi/relay/myServer.py - Версия Python может быть другой. Уже существует как минимум 3.12. Необходимо проверить какая версия в папке
 
 RestartSec=10
 Restart=always
