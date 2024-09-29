@@ -305,8 +305,8 @@ sudo systemctl restart nginx
 
 При всех включенных каналах перезагрузка системы просто их сбрасывает (отключает). Промаргивания реле при загрузке замечены не были.
 Перезагрузка RaspberryPi:
-![Перезагрузка RaspberryPi](https://github.com/wawanUnic/relay/blob/main/screenshots/rebootInHi.png)
+![Перезагрузка RaspberryPi](https://github.com/wawanUnic/relay/blob/main/screenshots/RebootInHi.png)
 
 При всех отключенных каналах перезагрузка системы проходит тихо. Промаргивания реле при загрузке замечены не были.
 Перезагрузка RaspberryPi:
-![Перезагрузка RaspberryPi](https://github.com/wawanUnic/relay/blob/main/screenshots/rebootInLow.png)
+![Перезагрузка RaspberryPi](https://github.com/wawanUnic/relay/blob/main/screenshots/RebootInLow.png)
