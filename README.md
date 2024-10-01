@@ -4,10 +4,15 @@
 
 ![Страница в мобильной версии](https://github.com/wawanUnic/relay/blob/main/screenshots/pageMobile2.png)
 
+Страница в десктопной версии:
+
+![Страница в мобильной версии](https://github.com/wawanUnic/relay/blob/main/screenshots/pageDesktop.png)
+
 
 ## 1. Установка на Raspberry 64bit
 
-Тестировалось на машине: raspberryPi 4, 2Gb RAM, 64Gb SSD
+Тестировалось на машине1: raspberryPi 4, 2Gb RAM, 64Gb SSD
+Тестировалось на машине2: raspberryPi 3, 1Gb RAM, 16Gb SD
 
 Должен иметься общедоступный ("белый") статический IP-адрес у RaspberryPi
 
